@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VidyaTutorial", "VidyaTutorial\VidyaTutorial\VidyaTutorial.csproj", "{EAD5B573-4DB9-405F-9ED8-8513683B763B}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "VidyaTutorialContent", "VidyaTutorial\VidyaTutorialContent\VidyaTutorialContent.contentproj", "{C65AEB72-E5EB-43B0-8C6A-9BF21D5C5721}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EAD5B573-4DB9-405F-9ED8-8513683B763B}.Debug|x86.ActiveCfg = Debug|x86
+		{EAD5B573-4DB9-405F-9ED8-8513683B763B}.Debug|x86.Build.0 = Debug|x86
+		{EAD5B573-4DB9-405F-9ED8-8513683B763B}.Release|x86.ActiveCfg = Release|x86
+		{EAD5B573-4DB9-405F-9ED8-8513683B763B}.Release|x86.Build.0 = Release|x86
+		{C65AEB72-E5EB-43B0-8C6A-9BF21D5C5721}.Debug|x86.ActiveCfg = Debug|x86
+		{C65AEB72-E5EB-43B0-8C6A-9BF21D5C5721}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
