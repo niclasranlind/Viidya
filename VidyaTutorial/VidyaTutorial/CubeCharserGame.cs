@@ -14,12 +14,18 @@ namespace VidyaTutorial
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Microsoft.Xna.Framework.Game
+    public class CubeCharserGame : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Camera camera;
+        Maze maze;
+        BasicEffect effect;
 
-        public Game1()
+        float moveScale = 1.5f;
+        float rotateScale = MathHelper.PiOver2;
+
+        public CubeCharserGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -34,8 +40,11 @@ namespace VidyaTutorial
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            camera = new Camera(new Vector3(0.5f, 0.5f, 0.5f), 0, GraphicsDevice.Viewport.AspectRatio, 0.05f, 100f);
+            effect = new BasicEffect(GraphicsDevice);
+            maze = new Maze(GraphicsDevice);
             base.Initialize();
+
         }
 
         /// <summary>
@@ -70,6 +79,42 @@ namespace VidyaTutorial
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            KeyboardState keyState = Keyboard.GetState();
+            float moveAmount = 0;
+            if (keyState.IsKeyDown(Keys.Right))
+            {
+                camera.Rotation = MathHelper.WrapAngle(
+                camera.Rotation - (rotateScale * elapsed));
+            }
+            if (keyState.IsKeyDown(Keys.Left))
+            {
+                camera.Rotation = MathHelper.WrapAngle(
+                camera.Rotation + (rotateScale * elapsed));
+            }
+            if (keyState.IsKeyDown(Keys.Up))
+            {
+                //camera.MoveForward(moveScale * elapsed);
+
+                moveAmount = moveScale * elapsed;
+            }
+            if (keyState.IsKeyDown(Keys.Down))
+            {
+                //camera.MoveForward(-moveScale * elapsed);
+                moveAmount = -moveScale * elapsed;
+            }
+            if (moveAmount != 0)
+            {
+                Vector3 newLocation = camera.PreviewMove(moveAmount);
+                bool moveOk = true;
+                if (newLocation.X < 0 || newLocation.X > Maze.mazeWidth)
+                    moveOk = false;
+                if (newLocation.Z < 0 || newLocation.Z > Maze.mazeHeight)
+                    moveOk = false;
+                if (moveOk)
+                    camera.MoveForward(moveAmount);
+            }
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -81,8 +126,9 @@ namespace VidyaTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            GraphicsDevice.Clear(Color.Gray);
+            maze.Draw(camera, effect);
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
