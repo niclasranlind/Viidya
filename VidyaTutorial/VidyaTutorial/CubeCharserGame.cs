@@ -80,8 +80,30 @@ namespace VidyaTutorial
                 this.Exit();
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            #region gamepad
+            GamePadState gpstate = GamePad.GetState(PlayerIndex.One);
+            float moveYAmount = 0;
+            float moveXAmount = 0;
+            if (gpstate.ThumbSticks.Left.X != 0.0f)
+            {
+                camera.Rotation = MathHelper.WrapAngle(
+                camera.Rotation - (gpstate.ThumbSticks.Left.X * elapsed));
+            }
+            
+            if (gpstate.ThumbSticks.Right.Y != 0.0f)
+            {
+                //camera.MoveForward(moveScale * elapsed);
+
+                moveYAmount = gpstate.ThumbSticks.Right.Y * elapsed;
+            }
+            if (gpstate.ThumbSticks.Right.X != 0.0f)
+            {
+                //camera.MoveForward(moveScale * elapsed);
+                moveXAmount = gpstate.ThumbSticks.Right.X * elapsed;
+            }
+            #endregion
             KeyboardState keyState = Keyboard.GetState();
-            float moveAmount = 0;
+            
             if (keyState.IsKeyDown(Keys.Right))
             {
                 camera.Rotation = MathHelper.WrapAngle(
@@ -96,24 +118,25 @@ namespace VidyaTutorial
             {
                 //camera.MoveForward(moveScale * elapsed);
 
-                moveAmount = moveScale * elapsed;
+                moveYAmount = moveScale * elapsed;
             }
             if (keyState.IsKeyDown(Keys.Down))
             {
                 //camera.MoveForward(-moveScale * elapsed);
-                moveAmount = -moveScale * elapsed;
+                moveYAmount = -moveScale * elapsed;
             }
-            if (moveAmount != 0)
+            if (moveYAmount != 0)
             {
-                Vector3 newLocation = camera.PreviewMove(moveAmount);
+                Vector3 newLocation = camera.PreviewMove(moveYAmount);
                 bool moveOk = true;
                 if (newLocation.X < 0 || newLocation.X > Maze.mazeWidth)
                     moveOk = false;
                 if (newLocation.Z < 0 || newLocation.Z > Maze.mazeHeight)
                     moveOk = false;
                 if (moveOk)
-                    camera.MoveForward(moveAmount);
+                    camera.MoveForward(moveYAmount);
             }
+
 
             // TODO: Add your update logic here
 
