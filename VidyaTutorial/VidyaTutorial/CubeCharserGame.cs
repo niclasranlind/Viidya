@@ -89,16 +89,19 @@ namespace VidyaTutorial
                 camera.Rotation = MathHelper.WrapAngle(
                 camera.Rotation - (gpstate.ThumbSticks.Left.X * elapsed));
             }
+            if (gpstate.ThumbSticks.Left.Y != 0.0f)
+            {
+                camera.Rotation = MathHelper.WrapAngle(
+                camera.Rotation - (gpstate.ThumbSticks.Left.Y * elapsed));
+            }
+            
             
             if (gpstate.ThumbSticks.Right.Y != 0.0f)
             {
-                //camera.MoveForward(moveScale * elapsed);
-
                 moveYAmount = gpstate.ThumbSticks.Right.Y * elapsed;
             }
             if (gpstate.ThumbSticks.Right.X != 0.0f)
             {
-                //camera.MoveForward(moveScale * elapsed);
                 moveXAmount = gpstate.ThumbSticks.Right.X * elapsed;
             }
             #endregion
@@ -117,7 +120,6 @@ namespace VidyaTutorial
             if (keyState.IsKeyDown(Keys.Up))
             {
                 //camera.MoveForward(moveScale * elapsed);
-
                 moveYAmount = moveScale * elapsed;
             }
             if (keyState.IsKeyDown(Keys.Down))
@@ -125,17 +127,19 @@ namespace VidyaTutorial
                 //camera.MoveForward(-moveScale * elapsed);
                 moveYAmount = -moveScale * elapsed;
             }
-            if (moveYAmount != 0)
+            if (moveYAmount != 0 || moveXAmount != 0)
             {
-                Vector3 newLocation = camera.PreviewMove(moveYAmount);
+                Vector3 newLocation = camera.PreviewMove(moveXAmount, moveYAmount);
                 bool moveOk = true;
                 if (newLocation.X < 0 || newLocation.X > Maze.mazeWidth)
                     moveOk = false;
                 if (newLocation.Z < 0 || newLocation.Z > Maze.mazeHeight)
                     moveOk = false;
+                
                 if (moveOk)
-                    camera.MoveForward(moveYAmount);
+                    camera.MoveForward(moveXAmount, moveYAmount);
             }
+
 
 
             // TODO: Add your update logic here

@@ -48,17 +48,17 @@ namespace VidyaTutorial
             UpdateLookAt();
         }
         
-        public Vector3 PreviewMove(float scale)
+        public Vector3 PreviewMove(float scaleX, float scaleY)
         {
             Matrix rotate = Matrix.CreateRotationY(rotation);
-            Vector3 forward = new Vector3(0, 0, scale);
+            Vector3 forward = new Vector3(scaleX, 0, scaleY);
             forward = Vector3.Transform(forward, rotate);
             return (position + forward);
         }
         
-        public void MoveForward(float scale)
+        public void MoveForward(float scaleX, float scaleY)
         {
-            MoveTo(PreviewMove(scale), rotation);
+            MoveTo(PreviewMove(scaleX, scaleY), rotation);
         }
 
         private void UpdateLookAt()
