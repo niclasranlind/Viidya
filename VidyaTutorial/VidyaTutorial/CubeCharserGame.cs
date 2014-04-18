@@ -81,42 +81,60 @@ namespace VidyaTutorial
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             #region gamepad
-            GamePadState gpstate = GamePad.GetState(PlayerIndex.One);
             float moveYAmount = 0;
             float moveXAmount = 0;
-            if (gpstate.ThumbSticks.Left.X != 0.0f)
-            {
-                camera.Rotation = MathHelper.WrapAngle(
-                camera.Rotation - (gpstate.ThumbSticks.Left.X * elapsed));
-            }
-            if (gpstate.ThumbSticks.Left.Y != 0.0f)
-            {
-                camera.Rotation = MathHelper.WrapAngle(
-                camera.Rotation - (gpstate.ThumbSticks.Left.Y * elapsed));
-            }
             
-            
-            if (gpstate.ThumbSticks.Right.Y != 0.0f)
+            GamePadState gpstate = GamePad.GetState(PlayerIndex.One);
+            if (gpstate.IsConnected)
             {
-                moveYAmount = gpstate.ThumbSticks.Right.Y * elapsed;
-            }
-            if (gpstate.ThumbSticks.Right.X != 0.0f)
-            {
-                moveXAmount = gpstate.ThumbSticks.Right.X * elapsed;
+                if (gpstate.ThumbSticks.Left.X != 0.0f)
+                {
+                    camera.RotationX = MathHelper.WrapAngle(
+                    camera.RotationX - (gpstate.ThumbSticks.Left.X * elapsed));
+                }
+                if (gpstate.ThumbSticks.Left.Y != 0.0f)
+                {
+                    camera.RotationY = MathHelper.WrapAngle(
+                    camera.RotationY - (gpstate.ThumbSticks.Left.Y * elapsed));
+                }
+
+                if (gpstate.ThumbSticks.Right.Y != 0.0f)
+                {
+                    moveYAmount = gpstate.ThumbSticks.Right.Y * elapsed;
+                }
+                if (gpstate.ThumbSticks.Right.X != 0.0f)
+                {
+                    moveXAmount = gpstate.ThumbSticks.Right.X * elapsed;
+                }
             }
             #endregion
+            
+            #region Keyboard
             KeyboardState keyState = Keyboard.GetState();
             
             if (keyState.IsKeyDown(Keys.Right))
             {
-                camera.Rotation = MathHelper.WrapAngle(
-                camera.Rotation - (rotateScale * elapsed));
+                camera.RotationY = MathHelper.WrapAngle(
+                camera.RotationY - (rotateScale * elapsed));
             }
             if (keyState.IsKeyDown(Keys.Left))
             {
-                camera.Rotation = MathHelper.WrapAngle(
-                camera.Rotation + (rotateScale * elapsed));
+                camera.RotationY = MathHelper.WrapAngle(
+                camera.RotationY + (rotateScale * elapsed));
             }
+            if (keyState.IsKeyDown(Keys.A))
+            {
+                camera.RotationX = MathHelper.WrapAngle(
+                camera.RotationX + (rotateScale * elapsed));
+            }
+            if (keyState.IsKeyDown(Keys.Z))
+            {
+                camera.RotationX = MathHelper.WrapAngle(
+                camera.RotationX - (rotateScale * elapsed));
+            }
+
+
+
             if (keyState.IsKeyDown(Keys.Up))
             {
                 //camera.MoveForward(moveScale * elapsed);
@@ -127,6 +145,8 @@ namespace VidyaTutorial
                 //camera.MoveForward(-moveScale * elapsed);
                 moveYAmount = -moveScale * elapsed;
             }
+            #endregion
+
             if (moveYAmount != 0 || moveXAmount != 0)
             {
                 Vector3 newLocation = camera.PreviewMove(moveXAmount, moveYAmount);
@@ -140,8 +160,6 @@ namespace VidyaTutorial
                     camera.MoveForward(moveXAmount, moveYAmount);
             }
 
-
-
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -153,7 +171,6 @@ namespace VidyaTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-
             GraphicsDevice.Clear(Color.Gray);
             maze.Draw(camera, effect);
             // TODO: Add your drawing code here
