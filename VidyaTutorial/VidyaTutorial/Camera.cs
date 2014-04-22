@@ -6,8 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace VidyaTutorial
 {
-
-    class Camera
+	public class Camera
     {
 
         private Vector3 position = Vector3.Zero;
@@ -73,10 +72,13 @@ namespace VidyaTutorial
 
             Matrix rotationMatrix = new Matrix();
             if (RotationY != 0) { rotationMatrix = Matrix.CreateRotationY(rotationY); }
-            if (RotationX != 0) { rotationMatrix = Matrix.CreateRotationX(rotationX); }
             Vector3 lookAtOffset = Vector3.Transform(baseCameraReferenceLookat, rotationMatrix);
-            lookAt = position + lookAtOffset;
-            needViewResync = true;
+
+			if(RotationX != 0) { rotationMatrix = Matrix.CreateRotationX(rotationX); }
+			Vector3 lookAtOffset2 = Vector3.Transform(baseCameraReferenceLookat, rotationMatrix);
+			lookAt = position + lookAtOffset + lookAtOffset2;
+
+			needViewResync = true;
         }
     }
 }
