@@ -173,6 +173,7 @@ namespace VidyaTutorial
         {
             GraphicsDevice.Clear(Color.Gray);
             maze.Draw(camera, effect);
+
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);

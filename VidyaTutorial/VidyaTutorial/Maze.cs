@@ -19,6 +19,10 @@ namespace VidyaTutorial
         private Random rand = new Random();
         public MazeCell[,] MazeCells = new MazeCell[mazeWidth, mazeHeight];
 
+        VertexBuffer wallBuffer;
+        Vector3[] wallPoints = new Vector3[8];
+        Color[] wallColors = new Color[4] { Color.Red, Color.Orange, Color.Red, Color.Orange };
+
         public Maze(GraphicsDevice graphicsDevice)
         {
             this.device = graphicsDevice;
@@ -29,7 +33,92 @@ namespace VidyaTutorial
                     MazeCells[x, z] = new MazeCell();
                 }
             GenerateMaze();
+            wallPoints[0] = new Vector3(0, 1, 0);
+            wallPoints[1] = new Vector3(0, 1, 1);
+            wallPoints[2] = new Vector3(0, 0, 0);
+            wallPoints[3] = new Vector3(0, 0, 1);
+            wallPoints[4] = new Vector3(1, 1, 0);
+            wallPoints[5] = new Vector3(1, 1, 1);
+            wallPoints[6] = new Vector3(1, 0, 0);
+            wallPoints[7] = new Vector3(1, 0, 1);
+            BuildWallBuffer();
         }
+
+        #region Walls
+        private void BuildWallBuffer()
+        {
+            List<VertexPositionColor> wallVertexList = new
+            List<VertexPositionColor>();
+            for (int x = 0; x < mazeWidth; x++)
+            {
+                for (int z = 0; z < mazeHeight; z++)
+                {
+                    foreach (VertexPositionColor vertex
+                    in BuildMazeWall(x, z))
+                    {
+                        wallVertexList.Add(vertex);
+                    }
+                }
+            }
+            wallBuffer = new VertexBuffer(
+            device,
+            VertexPositionColor.VertexDeclaration,
+            wallVertexList.Count,
+            BufferUsage.WriteOnly);
+            wallBuffer.SetData<VertexPositionColor>(
+            wallVertexList.ToArray());
+        }
+
+        private List<VertexPositionColor> BuildMazeWall(int x, int z)
+        {
+            List<VertexPositionColor> triangles = new
+            List<VertexPositionColor>();
+            if (MazeCells[x, z].Walls[0])
+            {
+                triangles.Add(CalcPoint(0, x, z, wallColors[0]));
+                triangles.Add(CalcPoint(4, x, z, wallColors[0]));
+                triangles.Add(CalcPoint(2, x, z, wallColors[0]));
+                triangles.Add(CalcPoint(4, x, z, wallColors[0]));
+                triangles.Add(CalcPoint(6, x, z, wallColors[0]));
+                triangles.Add(CalcPoint(2, x, z, wallColors[0]));
+            }
+            if (MazeCells[x, z].Walls[1])
+            {
+                triangles.Add(CalcPoint(4, x, z, wallColors[1]));
+                triangles.Add(CalcPoint(5, x, z, wallColors[1]));
+                triangles.Add(CalcPoint(6, x, z, wallColors[1]));
+                triangles.Add(CalcPoint(5, x, z, wallColors[1]));
+                triangles.Add(CalcPoint(7, x, z, wallColors[1]));
+                triangles.Add(CalcPoint(6, x, z, wallColors[1]));
+            }
+
+            if (MazeCells[x, z].Walls[2])
+            {
+                triangles.Add(CalcPoint(5, x, z, wallColors[2]));
+                triangles.Add(CalcPoint(1, x, z, wallColors[2]));
+                triangles.Add(CalcPoint(7, x, z, wallColors[2]));
+                triangles.Add(CalcPoint(1, x, z, wallColors[2]));
+                triangles.Add(CalcPoint(3, x, z, wallColors[2]));
+                triangles.Add(CalcPoint(7, x, z, wallColors[2]));
+            }
+            if (MazeCells[x, z].Walls[3])
+            {
+                triangles.Add(CalcPoint(1, x, z, wallColors[3]));
+                triangles.Add(CalcPoint(0, x, z, wallColors[3]));
+                triangles.Add(CalcPoint(3, x, z, wallColors[3]));
+                triangles.Add(CalcPoint(0, x, z, wallColors[3]));
+                triangles.Add(CalcPoint(2, x, z, wallColors[3]));
+                triangles.Add(CalcPoint(3, x, z, wallColors[3]));
+            } return triangles;
+        }
+
+        private VertexPositionColor CalcPoint(int wallPoint, int xOffset, int zOffset, Color color)
+        {
+            return new VertexPositionColor(
+            wallPoints[wallPoint] + new Vector3(xOffset, 0, zOffset),
+            color);
+        }
+        #endregion
 
         private void BuildFloorBuffer()
         {
@@ -99,6 +188,13 @@ namespace VidyaTutorial
                 PrimitiveType.TriangleList,
                 0,
                 floorBuffer.VertexCount / 3);
+                device.SetVertexBuffer(wallBuffer);
+                device.DrawPrimitives(
+                PrimitiveType.TriangleList,
+                0,
+                wallBuffer.VertexCount / 3);
+
+
             }
         }
         #region mazegeneration
