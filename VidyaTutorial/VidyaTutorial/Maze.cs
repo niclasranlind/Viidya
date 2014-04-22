@@ -203,7 +203,7 @@ namespace VidyaTutorial
                     MazeCells[x, z].Visited = false;
                 }
                 MazeCells[0, 0].Visited = true;
-                EvaluateCell(new Vector2(0, 0));
+                EvaluateCell(new Vector2(19, 19));
             }
         }
 
