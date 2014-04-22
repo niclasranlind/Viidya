@@ -188,14 +188,13 @@ namespace VidyaTutorial
                 PrimitiveType.TriangleList,
                 0,
                 floorBuffer.VertexCount / 3);
-                device.SetVertexBuffer(wallBuffer);
-                device.DrawPrimitives(
-                PrimitiveType.TriangleList,
-                0,
-                wallBuffer.VertexCount / 3);
-
-
+               
             }
+            device.SetVertexBuffer(wallBuffer);
+            device.DrawPrimitives(
+            PrimitiveType.TriangleList,
+            0,
+            wallBuffer.VertexCount / 3);
         }
         #region mazegeneration
 
@@ -247,8 +246,7 @@ namespace VidyaTutorial
                 (neighbor.Y < mazeHeight)
                 )
                 {
-                    if (!MazeCells[(int)neighbor.X, (int)neighbor.Y].
-                    Visited)
+                    if (!MazeCells[(int)neighbor.X, (int)neighbor.Y].Visited)
                     {
                         MazeCells[
                         (int)neighbor.X,
