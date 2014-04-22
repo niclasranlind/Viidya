@@ -24,8 +24,10 @@ namespace VidyaTutorial
 
         float moveScale = 1.5f;
         float rotateScale = MathHelper.PiOver2;
+	    private decimal _mouseX;
+	    private decimal _mouseY;
 
-        public CubeCharserGame()
+	    public CubeCharserGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -111,40 +113,61 @@ namespace VidyaTutorial
             
             #region Keyboard
             KeyboardState keyState = Keyboard.GetState();
-            
-            if (keyState.IsKeyDown(Keys.Right))
-            {
-                camera.RotationY = MathHelper.WrapAngle(
-                camera.RotationY - (rotateScale * elapsed));
-            }
-            if (keyState.IsKeyDown(Keys.Left))
-            {
-                camera.RotationY = MathHelper.WrapAngle(
-                camera.RotationY + (rotateScale * elapsed));
-            }
-            if (keyState.IsKeyDown(Keys.A))
-            {
-                camera.RotationX = MathHelper.WrapAngle(
-                camera.RotationX + (rotateScale * elapsed));
-            }
-            if (keyState.IsKeyDown(Keys.Z))
-            {
-                camera.RotationX = MathHelper.WrapAngle(
-                camera.RotationX - (rotateScale * elapsed));
-            }
+
+			if(keyState.IsKeyDown(Keys.W))
+			{
+				//camera.MoveForward(moveScale * elapsed);
+				moveYAmount = moveScale * elapsed;
+			}
+			if(keyState.IsKeyDown(Keys.S))
+			{
+				//camera.MoveForward(-moveScale * elapsed);
+				moveYAmount = -moveScale * elapsed;
+			}
 
 
+			if(keyState.IsKeyDown(Keys.A))
+			{
+				//camera.MoveForward(moveScale * elapsed);
+				moveXAmount = moveScale * elapsed;
+			}
+			if(keyState.IsKeyDown(Keys.D))
+			{
+				//camera.MoveForward(-moveScale * elapsed);
+				moveXAmount = -moveScale * elapsed;
+			}
+			#endregion
 
-            if (keyState.IsKeyDown(Keys.Up))
-            {
-                //camera.MoveForward(moveScale * elapsed);
-                moveYAmount = moveScale * elapsed;
-            }
-            if (keyState.IsKeyDown(Keys.Down))
-            {
-                //camera.MoveForward(-moveScale * elapsed);
-                moveYAmount = -moveScale * elapsed;
-            }
+			#region Mouse
+
+			var mouseState = Mouse.GetState();
+			if(mouseState.X > _mouseX && camera.RotationY > -1)
+			{
+				camera.RotationY = MathHelper.WrapAngle(
+				camera.RotationY - (rotateScale * elapsed));
+				_mouseX = mouseState.X;
+			}
+
+			if(mouseState.X < _mouseX && camera.RotationY < 1)
+			{
+				camera.RotationY = MathHelper.WrapAngle(
+				camera.RotationY + (rotateScale * elapsed));
+				_mouseX = mouseState.X;
+			}
+
+			if(mouseState.Y > _mouseY && camera.RotationX > -0.5)
+			{
+				camera.RotationX = MathHelper.WrapAngle(
+				camera.RotationX - (rotateScale * elapsed));
+				_mouseY = mouseState.Y;
+			}
+
+			if(mouseState.Y < _mouseY && camera.RotationX < 0.5)
+			{
+				camera.RotationX = MathHelper.WrapAngle(
+				camera.RotationX + (rotateScale * elapsed));
+				_mouseY = mouseState.Y;
+			}
             #endregion
 
             if (moveYAmount != 0 || moveXAmount != 0)
