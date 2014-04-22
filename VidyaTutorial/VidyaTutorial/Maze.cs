@@ -71,8 +71,7 @@ namespace VidyaTutorial
 
         private List<VertexPositionColor> BuildMazeWall(int x, int z)
         {
-            List<VertexPositionColor> triangles = new
-            List<VertexPositionColor>();
+            List<VertexPositionColor> triangles = new List<VertexPositionColor>();
             if (MazeCells[x, z].Walls[0])
             {
                 triangles.Add(CalcPoint(0, x, z, wallColors[0]));
@@ -137,17 +136,10 @@ namespace VidyaTutorial
                     }
                 }
             }
-            floorBuffer = new VertexBuffer(
-            device,
-            VertexPositionColor.VertexDeclaration,
-            vertexList.Count,
-            BufferUsage.WriteOnly);
-            floorBuffer.SetData<VertexPositionColor>(vertexList.
-            ToArray());
+            floorBuffer = new VertexBuffer(device, VertexPositionColor.VertexDeclaration, vertexList.Count, BufferUsage.WriteOnly);
+            floorBuffer.SetData<VertexPositionColor>(vertexList.ToArray());
         }
-        private List<VertexPositionColor> FloorTile(int xOffset,
-        int zOffset,
-        Color tileColor)
+        private List<VertexPositionColor> FloorTile(int xOffset, int zOffset, Color tileColor)
         {
             List<VertexPositionColor> vList = new List<VertexPositionColor>();
 
@@ -188,7 +180,7 @@ namespace VidyaTutorial
                 PrimitiveType.TriangleList,
                 0,
                 floorBuffer.VertexCount / 3);
-               
+
             }
             device.SetVertexBuffer(wallBuffer);
             device.DrawPrimitives(
@@ -239,30 +231,17 @@ namespace VidyaTutorial
                     case 3: neighbor += new Vector2(-1, 0);
                         break;
                 }
-                if (
-                (neighbor.X >= 0) &&
-                (neighbor.X < mazeWidth) &&
-                (neighbor.Y >= 0) &&
-                (neighbor.Y < mazeHeight)
-                )
+                if ((neighbor.X >= 0) && (neighbor.X < mazeWidth) && (neighbor.Y >= 0) && (neighbor.Y < mazeHeight))
                 {
                     if (!MazeCells[(int)neighbor.X, (int)neighbor.Y].Visited)
                     {
-                        MazeCells[
-                        (int)neighbor.X,
-                        (int)neighbor.Y].Visited = true;
-                        MazeCells[
-                        (int)cell.X,
-                        (int)cell.Y].Walls[selectedNeighbor] = false;
-                        MazeCells[
-                        (int)neighbor.X,
-                        (int)neighbor.Y].Walls[
-                        (selectedNeighbor + 2) % 4] = false;
+                        MazeCells[(int)neighbor.X, (int)neighbor.Y].Visited = true;
+                        MazeCells[(int)cell.X, (int)cell.Y].Walls[selectedNeighbor] = false;
+                        MazeCells[(int)neighbor.X, (int)neighbor.Y].Walls[(selectedNeighbor + 2) % 4] = false;
                         EvaluateCell(neighbor);
                     }
                 }
             }
-
         }
 
         #endregion
