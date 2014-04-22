@@ -75,6 +75,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Maze.cs" />
     <Compile Include="MazeCell.cs" />
+    <Compile Include="MouseController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="CubeCharserGame.cs" />

@@ -24,8 +24,7 @@ namespace VidyaTutorial
 
         float moveScale = 1.5f;
         float rotateScale = MathHelper.PiOver2;
-	    private decimal _mouseX;
-	    private decimal _mouseY;
+	    private MouseController mouseController;
 
 	    public CubeCharserGame()
         {
@@ -45,6 +44,8 @@ namespace VidyaTutorial
             camera = new Camera(new Vector3(0.5f, 0.5f, 0.5f), 0, GraphicsDevice.Viewport.AspectRatio, 0.05f, 100f);
             effect = new BasicEffect(GraphicsDevice);
             maze = new Maze(GraphicsDevice);
+
+			mouseController = new MouseController(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             base.Initialize();
 
         }
@@ -114,6 +115,11 @@ namespace VidyaTutorial
             #region Keyboard
             KeyboardState keyState = Keyboard.GetState();
 
+	        if (keyState.IsKeyDown(Keys.Escape))
+	        {
+		        Exit();
+	        }
+
 			if(keyState.IsKeyDown(Keys.W))
 			{
 				//camera.MoveForward(moveScale * elapsed);
@@ -140,34 +146,8 @@ namespace VidyaTutorial
 
 			#region Mouse
 
-			var mouseState = Mouse.GetState();
-			if(mouseState.X > _mouseX && camera.RotationY > -1)
-			{
-				camera.RotationY = MathHelper.WrapAngle(
-				camera.RotationY - (rotateScale * elapsed));
-				_mouseX = mouseState.X;
-			}
+			mouseController.Move(camera, gameTime);
 
-			if(mouseState.X < _mouseX && camera.RotationY < 1)
-			{
-				camera.RotationY = MathHelper.WrapAngle(
-				camera.RotationY + (rotateScale * elapsed));
-				_mouseX = mouseState.X;
-			}
-
-			if(mouseState.Y > _mouseY && camera.RotationX > -0.5)
-			{
-				camera.RotationX = MathHelper.WrapAngle(
-				camera.RotationX - (rotateScale * elapsed));
-				_mouseY = mouseState.Y;
-			}
-
-			if(mouseState.Y < _mouseY && camera.RotationX < 0.5)
-			{
-				camera.RotationX = MathHelper.WrapAngle(
-				camera.RotationX + (rotateScale * elapsed));
-				_mouseY = mouseState.Y;
-			}
             #endregion
 
             if (moveYAmount != 0 || moveXAmount != 0)
@@ -196,6 +176,7 @@ namespace VidyaTutorial
         {
             GraphicsDevice.Clear(Color.Gray);
             maze.Draw(camera, effect);
+			mouseController.Draw();
 
             // TODO: Add your drawing code here
 
